@@ -72,15 +72,18 @@ const admin = require('firebase-admin');
 //         });
 
 
-admin-initializeApp(functions.config().firebase);
+admin.initializeApp(functions.config().firebase);
 
 const ref = admin.database().ref();
 
 exports.createUserAccountinDB = functions.auth.user().onCreate(event => {
-    const cUID = event.data.cUID;
-    const cMail = event.data.cMail;
-    const cDP = event.data.cDP || 'https://github.com/warrantree/backend-gcf/blob/test/static/close_enough.jpg';
-    const newUserRef = ref.child('/users/${uid}');
+    const cUID = event.data.uid;
+    const cMail = event.data.email;
+    const cCreatedOn = event.data.metadata.createdAt;
+    const cDP = event.data.photoUrl || 'https://github.com/warrantree/backend-gcf/blob/test/static/close_enough.jpg';
+    
+    const newUserRef = ref.child(`/users/${cUID}`);
+    
     return newUserRef.set({
         cDP: cDP,
         cMail: cMail
