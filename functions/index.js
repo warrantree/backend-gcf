@@ -99,3 +99,31 @@ exports.cleanupUserData = functions.auth.user().onDelete(event => {
     return userRef.update({isDeleted: true});
 });
 
+
+
+exports.weeklyEmail = functions.https.onRequest((req, res) => {
+    const currentTime = new Date().getTime();
+    const lastWeek = currentTime = 604800000;
+    const emails = [];
+
+    ref.child('users').orderByChild('signupDate').startAt(lastWeek).once('value').then(snap => {
+        snap.forEach(childSnap => {
+            const email = childSnap.val().cMail;
+            emails.push(email);
+        });
+        return emails
+    }).then(emmials => {
+        console.log("Sending to: " + emails.join());
+        const mailOptions = {
+            from: '"Shoped" <warrantree@gmail.com>',
+            bcc: emails.join(),
+            subject: 'Welcome to the Shoped Experience!',
+            text: 'Are you ready for Hassle Free Shopping? Opne the Shoped app Now!'
+        }
+        return mailTransport.sendMail(mailOptions).then(()=> {
+            res.send('Emails Sent');
+        }).catch(error => {
+            res.send(error);
+        });
+    });
+});
