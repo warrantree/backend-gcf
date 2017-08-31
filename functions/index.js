@@ -106,7 +106,7 @@ const mailTransport = nodemailer.createTransport({
     secure: true,
     auth: {
         user: 'jenemail@gmail.com',
-        pass: 'thisIsFace1234'
+        pass: 'thisIsFace123433'
     }
 })
 
