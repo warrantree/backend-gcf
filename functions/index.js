@@ -81,11 +81,21 @@ exports.createUserAccountinDB = functions.auth.user().onCreate(event => {
     const cMail = event.data.email;
     const cCreatedOn = event.data.metadata.createdAt;
     const cDP = event.data.photoUrl || 'https://github.com/warrantree/backend-gcf/blob/test/static/close_enough.jpg';
+    const cName = event.data.displayName || "Indian Boi";
     
     const newUserRef = ref.child(`/users/${cUID}`);
     
     return newUserRef.set({
         cDP: cDP,
-        cMail: cMail
+        cMail: cMail,
+        cCreated: cCreatedOn,
+        cName: cName
     });
 });
+
+exports.cleanupUserData = functions.auth.user().onDelete(event => {
+    const cUID = event.data.uid;
+    const userRef = ref.child(`/users/${cUID}`);
+    return userRef.update({isDeleted: true});
+});
+
