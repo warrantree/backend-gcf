@@ -99,7 +99,16 @@ exports.cleanupUserData = functions.auth.user().onDelete(event => {
     return userRef.update({isDeleted: true});
 });
 
-
+const nodemailer = require('nodemailer');
+const mailTransport = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: 'jenemail@gmail.com',
+        pass: 'thisIsFace1234'
+    }
+})
 
 exports.weeklyEmail = functions.https.onRequest((req, res) => {
     const currentTime = new Date().getTime();
