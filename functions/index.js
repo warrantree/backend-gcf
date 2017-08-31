@@ -120,7 +120,7 @@ exports.weeklyEmail = functions.https.onRequest((req, res) => {
             const email = childSnap.val().cMail;
             emails.push(email);
         });
-        return emails
+        return emails;
     }).then(emmials => {
         console.log("Sending to: " + emails.join());
         const mailOptions = {
